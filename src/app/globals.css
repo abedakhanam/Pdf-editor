@@ -4,7 +4,6 @@
 
 .container {
   max-width: 800px;
-  margin: 0 auto;
 }
 
 .btn {
@@ -20,4 +19,9 @@
 
 .btn-green {
   background-color: #16a34a;
+}
+/* globals.css */
+.pdf-viewer-container {
+  max-height: calc(100vh - 50px); /* Adjust as needed */
+  overflow-y: auto;
 }
