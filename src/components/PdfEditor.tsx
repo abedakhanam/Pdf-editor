@@ -23,15 +23,11 @@ interface FieldProps {
   content?: string | null;
 }
 
-const DraggableField: React.FC<FieldProps & { onMove: (id: string, deltaX: number, deltaY: number) => void, onUpdate: (id: string, content: string) => void }> = ({
-  id,
-  type,
-  x,
-  y,
-  content,
-  onMove,
-  onUpdate,
-}) => {
+const DraggableField: React.FC<FieldProps & {
+  onMove: (id: string, deltaX: number, deltaY: number) => void;
+  onUpdate: (id: string, content: string) => void;
+  onDelete: (id: string) => void;
+}> = ({ id, type, x, y, content, onMove, onUpdate, onDelete }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.FIELD,
     item: { id, x, y },
@@ -61,10 +57,25 @@ const DraggableField: React.FC<FieldProps & { onMove: (id: string, deltaX: numbe
         zIndex: 10,
       }}
     >
+      <button
+        onClick={() => onDelete(id)}
+        style={{
+          position: "absolute",
+          top: -10,
+          right: -10,
+          backgroundColor: "red",
+          color: "white",
+          border: "none",
+          borderRadius: "50%",
+          width: "20px",
+          height: "20px",
+          cursor: "pointer",
+        }}
+      >
+        ×
+      </button>
       {type === "Signature" ? (
-        <SignatureField
-          onSign={(sign) => onUpdate(id, sign)}
-        />
+        <SignatureField onSign={(sign) => onUpdate(id, sign)} />
       ) : (
         <input
           type="text"
@@ -113,6 +124,10 @@ const PdfEditor = () => {
     );
   };
 
+  const deleteField = (id: string) => {
+    setFields((prevFields) => prevFields.filter((field) => field.id !== id));
+  };
+
   const saveDocument = async () => {
     if (!fileUrl) return;
 
@@ -159,7 +174,13 @@ const PdfEditor = () => {
             <Worker workerUrl={`https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js`}>
               <PdfViewer fileUrl={fileUrl} />
               {fields.map((field) => (
-                <DraggableField key={field.id} {...field} onMove={moveField} onUpdate={updateFieldContent} />
+                <DraggableField
+                  key={field.id}
+                  {...field}
+                  onMove={moveField}
+                  onUpdate={updateFieldContent}
+                  onDelete={deleteField}
+                />
               ))}
             </Worker>
           </div>
