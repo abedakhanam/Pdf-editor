@@ -2,20 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.btn-blue {
+  background-color: #3b82f6;
+}
+
+.btn-green {
+  background-color: #16a34a;
 }
